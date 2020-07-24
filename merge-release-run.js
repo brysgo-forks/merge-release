@@ -8,7 +8,21 @@ const { promisify } = require('util')
 
 const getlog = promisify(git.log.bind(git))
 
-const get = bent('json', process.env.NPM_REGISTRY_URL || 'https://registry.npmjs.org/')
+const registries = []
+
+if (process.env.USE_GITHUB) {
+  registries.unshift('https://npm.pkg.github.com')
+}
+if (process.env.USE_NPM) {
+  registries.unshift('https://registry.npmjs.org/')
+}
+const manualRegistry = process.env.NPM_REGISTRY_URL || 'https://registry.npmjs.org/'
+if (!registries.includes(manualRegistry)) {
+  retistries.unshift(manualRegistry)
+}
+
+const getAll = registries.map(registry => bent('json', registry))
+const get = getAll[0] // default to first repository for source of truth
 
 const event = JSON.parse(fs.readFileSync('/github/workflow/event.json').toString())
 
@@ -24,7 +38,7 @@ const run = async () => {
   if (!process.env.NPM_AUTH_TOKEN) throw new Error('Merge-release requires NPM_AUTH_TOKEN')
   let latest
   try {
-    latest = await get(pkg.name + '/latest')
+    latest = get(pkg.name + '/latest')
   } catch (e) {
     // unpublished
   }
@@ -64,7 +78,7 @@ const run = async () => {
   let newVersion = execSync(`npm version --git-tag-version=false ${version}`, { cwd: srcPackageDir }).toString()
   exec(`npm version --allow-same-version=true --git-tag-version=false ${newVersion} `, deployDir)
   console.log('new version:', newVersion)
-  exec(`npm publish`, deployDir)
+  registries.forEach(registry => exec(`NPM_REGISTRY_URL="${registry}" npm publish`, deployDir))
   exec(`git checkout package.json`) // cleanup
   exec(`git tag ${newVersion}`)
   exec(`echo "::set-output name=version::${newVersion}"`) // set action event.{STEP_ID}.output.version
