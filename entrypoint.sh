@@ -41,7 +41,7 @@ if [ "$GITHUB_REPOSITORY" = "brysgo-forks/merge-release" ]; then
   ./merge-release-run.js "$@"
 else
   echo "npx @brysgo/merge-release"
-  npx merge-release "$@"
+  npx @brysgo/merge-release "$@"
 fi
 
 git push "${remote_repo}" --tags
