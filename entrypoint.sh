@@ -38,7 +38,7 @@ git branch --verbose
 
 if [ "$GITHUB_REPOSITORY" = "brysgo-forks/merge-release" ]; then
   echo "node merge-release-run.js"
-  node merge-release-run.js "$@"
+  ./merge-release-run.js "$@"
 else
   echo "npx @brysgo/merge-release"
   npx merge-release "$@"
