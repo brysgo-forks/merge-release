@@ -78,7 +78,7 @@ const run = async () => {
   let newVersion = execSync(`npm version --git-tag-version=false ${version}`, { cwd: srcPackageDir }).toString()
   exec(`npm version --allow-same-version=true --git-tag-version=false ${newVersion} `, deployDir)
   console.log('new version:', newVersion)
-  registries.forEach(registry => exec("npm publish", { cwd: deployDir, env: { 'NPM_REGISTRY_URL': registry }))
+  registries.forEach(registry => exec("npm publish", { cwd: deployDir, env: { 'NPM_REGISTRY_URL': registry }}))
   exec(`git checkout package.json`) // cleanup
   exec(`git tag ${newVersion}`)
   exec(`echo "::set-output name=version::${newVersion}"`) // set action event.{STEP_ID}.output.version
