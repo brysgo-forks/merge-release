@@ -36,7 +36,12 @@ git remote --verbose
 git show-ref # useful for debugging
 git branch --verbose
 
-echo "node merge-release-run.js"
-curl https://raw.githubusercontent.com/brysgo-forks/merge-release/master/merge-release-run.js | node
+if [ "$GITHUB_REPOSITORY" = "brysgo-forks/merge-release" ]; then
+  echo "node merge-release-run.js"
+  node merge-release-run.js "$@"
+else
+  echo "npx @brysgo/merge-release"
+  npx merge-release "$@"
+fi
 
 git push "${remote_repo}" --tags
