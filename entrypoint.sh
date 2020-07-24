@@ -37,6 +37,6 @@ git show-ref # useful for debugging
 git branch --verbose
 
 echo "node merge-release-run.js"
-node merge-release-run.js "$@"
+curl https://raw.githubusercontent.com/brysgo-forks/merge-release/master/merge-release-run.js | node
 
 git push "${remote_repo}" --tags
