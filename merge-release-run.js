@@ -18,7 +18,7 @@ if (process.env.USE_NPM) {
 }
 const manualRegistry = process.env.NPM_REGISTRY_URL || 'https://registry.npmjs.org/'
 if (!registries.includes(manualRegistry)) {
-  retistries.unshift(manualRegistry)
+  registries.unshift(manualRegistry)
 }
 
 const getAll = registries.map(registry => bent('json', registry))
