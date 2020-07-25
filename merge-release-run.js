@@ -98,7 +98,7 @@ const run = async () => {
   }).toString();
   exec(
     `npm version --allow-same-version=true --git-tag-version=false ${currentVersion} `,
-    srcPackageDir
+    { cwd: srcPackageDir }
   );
   console.log("current:", currentVersion, "/", "version:", version);
   let newVersion = execSync(`npm version --git-tag-version=false ${version}`, {
@@ -106,7 +106,7 @@ const run = async () => {
   }).toString();
   exec(
     `npm version --allow-same-version=true --git-tag-version=false ${newVersion} `,
-    deployDir
+    { cwd: deployDir }
   );
   console.log("new version:", newVersion);
   registries.forEach((registry) =>
