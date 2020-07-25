@@ -110,7 +110,10 @@ const run = async () => {
   );
   console.log("new version:", newVersion);
   registries.forEach((registry) =>
-    exec("npm publish", { cwd: deployDir, env: { NPM_REGISTRY_URL: registry } })
+    exec("npm publish", {
+      cwd: deployDir,
+      env: { ...process.env, NPM_REGISTRY_URL: registry },
+    })
   );
   exec(`git checkout package.json`); // cleanup
   exec(`git tag ${newVersion}`);
