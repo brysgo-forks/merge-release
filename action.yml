@@ -1,0 +1,18 @@
+name: "Automated releases for npm packages."
+description: "Release npm package based on commit metadata."
+inputs:
+  USE_NPM:
+    description: "Publish to default npm registry"
+    required: false
+    default: true
+  USE_GITHUB:
+    description: "Publish to github registry"
+    required: false
+    default: false
+  OTHER_REGISTRY:
+    description: "Publish to a custom registry"
+    required: false
+    default: false
+runs:
+  using: "node12"
+  main: "merge-release-run.js"
